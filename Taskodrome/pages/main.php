@@ -165,11 +165,11 @@
 
     $t_user_id = auth_get_current_user_id();
     if( ALL_PROJECTS == $current_project_id ) {
-        $t_project_ids_to_check = user_get_all_accessible_projects( $t_user_id, ALL_PROJECTS );
+        $t_project_ids_to_check = user_get_all_accessible_projects( $t_user_id, ALL_PROJECTS, false );
         $t_project_ids = array();
         foreach ( $t_project_ids_to_check as $current_project_id ) {
             $t_roadmap_view_access_level = config_get( 'roadmap_view_threshold', null, null, $current_project_id );
-            if( access_has_project_level( $t_roadmap_view_access_level, $current_project_id ) ) {
+            if( access_has_project_level( $t_roadmap_view_access_level, $current_project_id, false ) ) {
                 $t_project_ids[] = $current_project_id;
             }
         }
@@ -178,7 +178,7 @@
         $t_project_ids = user_get_all_accessible_subprojects( $t_user_id, $current_project_id );
         array_unshift( $t_project_ids, $current_project_id );
     }
-    
+    /*
     $t_versions = version_get_all_rows( $current_project_id );
     $t_versions = array_reverse( $t_versions );
         
@@ -187,6 +187,7 @@
       $ver_id = $t_versions[$k]['id'];
       print '<p class="version" value="'.version_get_field($ver_id, "version").'"></p>';
     }
+    */
 
     print '<p class="status_board_order" value="'.$status_order.'"></p>';
     print '<p id="autoassign" value="'. config_get( "auto_set_status_to_assigned" ) .'"></p>';
@@ -210,11 +211,12 @@
     <input type="radio" id="radio_rg" name="group" >
 
     <label id="label_dg" class="radio_label" for="radio_dg" >' . plugin_lang_get("assignment_board") . '</label>
+    <!--
     <label id="label_sg" class="radio_label" for="radio_sg" >' . plugin_lang_get("status_board") . '</label>
     <label id="label_rg" class="radio_label" for="radio_rg" >' . plugin_lang_get("relationship_board") . '</label>
-
     <input type="checkbox" id="checkbox_version">
     <label id="label_version" class="checkbox_label" for="checkbox_version">' . plugin_lang_get("empty_version_label") . '</label>
+    -->
 
     <div class="tabs_cont">
     <div id="tab_c1" class="grid">
