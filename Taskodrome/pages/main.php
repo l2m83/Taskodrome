@@ -217,6 +217,7 @@
     <input type="checkbox" id="checkbox_version">
     <label id="label_version" class="checkbox_label" for="checkbox_version">' . plugin_lang_get("empty_version_label") . '</label>
     -->
+    <input type="hidden" id="checkbox_version" value="false">
 
     <div class="tabs_cont">
     <div id="tab_c1" class="grid">
