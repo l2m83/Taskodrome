@@ -165,17 +165,17 @@
 
     $t_user_id = auth_get_current_user_id();
     if( ALL_PROJECTS == $current_project_id ) {
-        $t_project_ids_to_check = user_get_all_accessible_projects( $t_user_id, ALL_PROJECTS, false );
+        $t_project_ids_to_check = user_get_all_accessible_projects( $t_user_id, ALL_PROJECTS);
         $t_project_ids = array();
         foreach ( $t_project_ids_to_check as $current_project_id ) {
             $t_roadmap_view_access_level = config_get( 'roadmap_view_threshold', null, null, $current_project_id );
-            if( access_has_project_level( $t_roadmap_view_access_level, $current_project_id, false ) ) {
+            if( access_has_project_level( $t_roadmap_view_access_level, $current_project_id) ) {
                 $t_project_ids[] = $current_project_id;
             }
         }
     } else {
         access_ensure_project_level( config_get( 'roadmap_view_threshold' ), $current_project_id );
-        $t_project_ids = user_get_all_accessible_subprojects( $t_user_id, $current_project_id );
+        $t_project_ids = user_get_all_accessible_subprojects( $t_user_id, $current_project_id);
         array_unshift( $t_project_ids, $current_project_id );
     }
     /*
@@ -266,7 +266,7 @@
       # Get list of users having access level for all accessible projects
       $t_users = array();
       foreach( $t_projects as $t_project_id ) {
-        $t_project_users_list = project_get_all_user_rows( $t_project_id, DEVELOPER );
+        $t_project_users_list = project_get_all_user_rows( $t_project_id, DEVELOPER, false );
         # Do a 'smart' merge of the project's user list, into an
         # associative array (to remove duplicates)
         # Use a foreach loop for correctness
@@ -277,7 +277,7 @@
       }
       unset( $t_projects );
     } else {
-      $t_users = project_get_all_user_rows( $p_project_id, DEVELOPER );
+      $t_users = project_get_all_user_rows( $p_project_id, DEVELOPER, false );
     }
 
     $t_show_realname = ( ON == config_get( 'show_realname' ) );
