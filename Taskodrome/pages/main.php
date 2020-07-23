@@ -204,8 +204,10 @@
     print '</div>';
 
     print $rels_str;
-
-    print '<section class="tabs">
+    //TODO internationalize note
+    print '
+    Note : le filtre courant est appliqué lors de la visualisation des fiches<br>
+    <section class="tabs">
 
     <input type="radio" id="radio_dg" name="group" >
     <input type="radio" id="radio_sg" name="group" >
