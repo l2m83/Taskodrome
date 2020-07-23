@@ -33,6 +33,7 @@ var DataSource = (function() {
         status : parseInt(el.getAttribute("status"), 10),
         handler_id : parseInt(el.getAttribute("handler_id"), 10),
         updateTime: el.getAttribute("updateTime"),
+        creationTime: el.getAttribute("creationTime"),
         description: el.getAttribute("description"),
         severity: el.getAttribute("severity"),
         priority: el.getAttribute("priority"),

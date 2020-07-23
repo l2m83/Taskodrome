@@ -46,7 +46,7 @@ var StatusPage = (function() {
 
       function addIssue(issue) {
         if (issue.version == version) {
-          var card = new Card(issue.id, DataSource.Inst().UserName(issue.handler_id), issue.version, issue.summary, issue.description, issue.severity, issue.priority, issue.priorityCode, issue.reproducibility, issue.updateTime, issue.status, 
+          var card = new Card(issue.id, DataSource.Inst().UserName(issue.handler_id), issue.version, issue.summary, issue.description, issue.severity, issue.priority, issue.priorityCode, issue.reproducibility, issue.updateTime, issue.creationTime, issue.status, 
             true,
             m_cardTransferHandler, columnHandler, page);
           m_cards[issue.id] = card;

@@ -1,4 +1,4 @@
-function Card(id, owner, version, summary, description, severity, priority, priorityCode, reproducibility, updateTime, status,
+function Card(id, owner, version, summary, description, severity, priority, priorityCode, reproducibility, updateTime, creationTime, status,
   showOwner,
   /** @type {CardTransferHandler} */cardTransferHandler, /** @type {ColumnHandler} */columnHandler, /** @type {Page} */page) {
   var H_OFFSET = 10;
@@ -18,6 +18,7 @@ function Card(id, owner, version, summary, description, severity, priority, prio
   var m_summary = { value: (summary == null ? "" : summary), gr: null };
   var m_description = (description == null ? " " : description);
   var m_updateTime = { value: updateTime, stamp: null };
+  var m_creationTime = { value: creationTime, stamp: null };
   var m_status = { value: status, mark: null };
   var m_owner = { value: (owner == null ? " " : owner), gr: null };
 
@@ -35,6 +36,7 @@ function Card(id, owner, version, summary, description, severity, priority, prio
   this.getOwner = function() { return m_owner.value; };
   this.hasNoOwner = function() { return m_owner.value == " "; };
   this.getUpdateTime = function() { return m_updateTime.value; };
+  this.getCreationTime = function() { return m_creationTime.value; };
 
   var parentDraw = this.draw;
   this.draw = function() {
@@ -69,6 +71,7 @@ function Card(id, owner, version, summary, description, severity, priority, prio
     m_self.setStatus(src.getStatus());
     m_self.setOwner(src.getOwner());
     m_self.setUpdateTime(src.getUpdateTime());
+    m_self.setCreationTime(src.getCreationTime());
     var card = new fabric.Group(m_self._getGraphics().getObjects(), {
       hasBorders: false,
       hasControls: false,
@@ -136,6 +139,7 @@ function Card(id, owner, version, summary, description, severity, priority, prio
         var heightDiff = newHeight - oldHeight;
         m_summary.gr.top += heightDiff;
         m_updateTime.stamp.top += heightDiff;
+        m_creationTime.stamp.top += heightDiff;
         m_content_back.height += heightDiff;
 
         m_self._getGraphics().calcCoords();
@@ -240,7 +244,8 @@ function Card(id, owner, version, summary, description, severity, priority, prio
   };
 
   function createPriorityMark(left, top, bottom) {
-    var path = "plugins/Taskodrome/files/assets/";
+    //TODO use plugin_file('assets/')
+    var path = "plugin_file.php?file=Taskodrome/assets/";
     switch (priorityCode) {
       case 20: path += "lower.png"; break;
       case 30: path += "minus.png"; break;
@@ -287,6 +292,11 @@ function Card(id, owner, version, summary, description, severity, priority, prio
     m_updateTime.stamp.left = TEXT_H_OFFSET;
     m_updateTime.stamp.top = Math.round(m_summary.gr.top + m_summary.gr.getScaledHeight() + m_updateTime.stamp.getScaledHeight() / 2);
 
+    m_creationTime.stamp = createCreationTimestamp();
+    m_creationTime.stamp.left = TEXT_H_OFFSET;
+    m_creationTime.stamp.top = Math.round(m_summary.gr.top + m_summary.gr.getScaledHeight()  + m_updateTime.stamp.getScaledHeight()
+       + m_creationTime.stamp.getScaledHeight() / 2);
+
     m_content_back = new fabric.Rect({
       left: 0,
       top: v_offset,
@@ -295,7 +305,7 @@ function Card(id, owner, version, summary, description, severity, priority, prio
       stroke: STROKE_COLOR,
 
       width: width,
-      height: Math.round(m_updateTime.stamp.top + 1.5 * m_updateTime.stamp.getScaledHeight()) - v_offset,
+      height: Math.round(m_updateTime.stamp.top + 1.5 * (m_updateTime.stamp.getScaledHeight() + m_creationTime.stamp.getScaledHeight())) - v_offset,
 
       rx: 1,
       ry: 1,
@@ -306,7 +316,7 @@ function Card(id, owner, version, summary, description, severity, priority, prio
       selectable: false
     });
 
-    var res = [m_content_back, m_summary.gr, m_updateTime.stamp];
+    var res = [m_content_back, m_summary.gr, m_updateTime.stamp, m_creationTime.stamp];
     if (m_owner.gr != null) {
       res.push(m_owner.gr);
     }
@@ -331,14 +341,42 @@ function Card(id, owner, version, summary, description, severity, priority, prio
     return res;
   };
 
-  function getTemperatureColor(updateTime) {
+  function createCreationTimestamp() {
+    var currentTime = (new Date().getTime()) / 1000;
+    var timeFromUpdate = currentTime - m_creationTime.value;
+    var date = new Date(timeFromUpdate * 1000);
+    var color = getTemperatureColor(m_creationTime.value, true);
+    
+    var res = new fabric.Text(toDuration(date), {
+      fontFamily: "Arial",
+      fontSize: fabric.util.parseUnit("12px"),
+      fill: color,
+  
+      evented: false,
+      hasBorders: false,
+      hasControls: false,
+      selectable: false
+    });
+
+    return res;
+  };
+
+  function toDuration(date) {
+    return Math.floor(date /(1000 * 60 * 60 * 24))+"j";
+  }
+
+  function getTemperatureColor(updateTime, invertHue=false) {
     var currentTime = (new Date().getTime()) / 1000;
     var timeFromUpdate = currentTime - updateTime;
   
-    if (timeFromUpdate > DataSource.Inst().CooldownPeriod())
+    if (timeFromUpdate > DataSource.Inst().CooldownPeriod()) {
+      if(invertHue) {
+        return "#FF0000";
+      }
       return "#1D1DE2";
-    else if (timeFromUpdate < 0)
+    } else if (timeFromUpdate < 0) {
       timeFromUpdate = 0;
+    }
   
     var sat = 0.77;
     var lgt = 0.5;
@@ -356,6 +394,9 @@ function Card(id, owner, version, summary, description, severity, priority, prio
       default: huePart = 1; break;
     }
     var max_hue = 0.66667;
+    if (invertHue) {
+      huePart = 1 - huePart;
+    }
     var hue = huePart * max_hue;
   
     var rgb = hslToRgb(hue, sat, lgt);

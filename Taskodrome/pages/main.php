@@ -97,6 +97,7 @@
       $issues_array_html .= 'status="'.$t_row->status.'" ';
       $issues_array_html .= 'handler_id="'.$handler_id.'" ';
       $issues_array_html .= 'updateTime="'.$t_row->last_updated.'" ';
+      $issues_array_html .= 'creationTime="'.$t_row->date_submitted.'" ';
       $description = strip_tags($t_row->description);
       $description = str_replace('"', '&#34;', $description);
       $issues_array_html .= 'description="'.$description.'" ';
