@@ -25,9 +25,19 @@ print_manage_menu( 'manage_plugin_page.php' );
         <div class="widget-header widget-header-small">
           <h4 class="widget-title lighter">
             <i class="ace-icon fa fa-text-width"></i>
-            <?php echo plugin_lang_get( 'title' ) . ': ' . plugin_lang_get( 'config' )?>
+            <?php echo plugin_lang_get( 'title' ) . ': ' . plugin_lang_get( 'config' )."  - ";
+
+              if( helper_get_current_project() == ALL_PROJECTS ) {
+                //TODO get lang from Mantis or add new plugin lang entry
+                echo "Tous les projets";
+              } else {
+                echo project_get_field( helper_get_current_project(), 'name' );
+              }
+
+            ?>
           </h4>
         </div>
+	      
 
         <div class="widget-body">
           <div class="widget-main no-padding">
