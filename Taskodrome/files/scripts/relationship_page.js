@@ -167,7 +167,7 @@ var RelPage = (function() {
 
         var card = new Card(item.issue.id, DataSource.Inst().UserName(item.issue.handler_id), item.issue.version, item.issue.summary, item.issue.description, item.issue.severity, item.issue.priority, item.issue.priorityCode, item.issue.reproducibility, item.issue.updateTime, item.issue.creationTime, item.issue.status, 
           false,
-          null, m_columnHandler, m_page);
+          null, m_columnHandler, m_page, item.issue.additional);
         card.draw();
         card.setPos(new Position(rect.x, rect.y));
         card.show();

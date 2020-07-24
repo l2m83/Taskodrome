@@ -88,7 +88,7 @@ function getPathToMantisFile(window, filename) {
   return result;
 };
 
-function createShortenedText(text, maxWidth, maxHeight, isSingleLine) {
+function createShortenedText(text, maxWidth, maxHeight, isSingleLine, color="#000") {
   var textGr = null;
   var resWidth = null;
   var resHeight = null;
@@ -101,6 +101,7 @@ function createShortenedText(text, maxWidth, maxHeight, isSingleLine) {
       textGr = new fabric.Text(shortenedText, {
         fontFamily: "Arial",
         fontSize: fontSize,
+        fill: color,
 
         evented: false,
         hasBorders: false,
@@ -111,6 +112,8 @@ function createShortenedText(text, maxWidth, maxHeight, isSingleLine) {
       textGr = new fabric.Textbox(shortenedText, {
         fontFamily: "Arial",
         fontSize: fontSize,
+        fill: color,
+
 
         width: maxWidth - 2,
 

@@ -1,6 +1,6 @@
 function Card(id, owner, version, summary, description, severity, priority, priorityCode, reproducibility, updateTime, creationTime, status,
   showOwner,
-  /** @type {CardTransferHandler} */cardTransferHandler, /** @type {ColumnHandler} */columnHandler, /** @type {Page} */page) {
+  /** @type {CardTransferHandler} */cardTransferHandler, /** @type {ColumnHandler} */columnHandler, /** @type {Page} */page, additional=null) {
   var H_OFFSET = 10;
   var V_OFFSET = 10;
 
@@ -21,6 +21,7 @@ function Card(id, owner, version, summary, description, severity, priority, prio
   var m_creationTime = { value: creationTime, stamp: null };
   var m_status = { value: status, mark: null };
   var m_owner = { value: (owner == null ? " " : owner), gr: null };
+  var m_additional = { value: additional, gr: null}
 
   var m_content_back = null;
 
@@ -140,6 +141,9 @@ function Card(id, owner, version, summary, description, severity, priority, prio
         m_summary.gr.top += heightDiff;
         m_updateTime.stamp.top += heightDiff;
         m_creationTime.stamp.top += heightDiff;
+        if (m_additional.value != null) {
+          m_additional.gr.top += heightDiff;
+        }
         m_content_back.height += heightDiff;
 
         m_self._getGraphics().calcCoords();
@@ -297,6 +301,13 @@ function Card(id, owner, version, summary, description, severity, priority, prio
     m_creationTime.stamp.top = Math.round(m_summary.gr.top + m_summary.gr.getScaledHeight()  + m_updateTime.stamp.getScaledHeight()
        + m_creationTime.stamp.getScaledHeight() / 2);
 
+    if (m_additional.value != null) {
+      m_additional.gr = createShortenedText(m_additional.value.toString(), text_maxwidth, maxHeight, false,"#F00");
+      m_additional.gr.left = TEXT_H_OFFSET;
+      m_additional.gr.top = Math.round(m_summary.gr.top + m_summary.gr.getScaledHeight()  + m_updateTime.stamp.getScaledHeight()
+      + m_creationTime.stamp.getScaledHeight() +  m_additional.gr.getScaledHeight() / 2);
+    }
+
     m_content_back = new fabric.Rect({
       left: 0,
       top: v_offset,
@@ -317,6 +328,9 @@ function Card(id, owner, version, summary, description, severity, priority, prio
     });
 
     var res = [m_content_back, m_summary.gr, m_updateTime.stamp, m_creationTime.stamp];
+    if (m_additional.value != null) {
+      res = [m_content_back, m_summary.gr, m_updateTime.stamp, m_creationTime.stamp, m_additional.gr];
+    }
     if (m_owner.gr != null) {
       res.push(m_owner.gr);
     }

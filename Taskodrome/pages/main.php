@@ -67,6 +67,7 @@
     $t_all_statuses = array();
     $t_status_colors = array();
     $t_rows = count( $p_rows );
+    var_dump($p_rows[0]);
     for( $i=0; $i < $t_rows; $i++ ) {
       $t_row = $p_rows[$i];
 
@@ -106,6 +107,11 @@
       $issues_array_html .= 'priorityCode="'.$t_row->priority.'" ';
       $issues_array_html .= 'reproducibility="'.get_enum_element('reproducibility', $t_row->reproducibility).'" ';
       $issues_array_html .= 'version="'.$t_row->target_version.'" ';
+      //TODO specific field to set as plugin configuration!!
+      $additionalFieldValue = custom_field_get_value(38, $t_row->id);
+      if ($additionalFieldValue != null) {
+        $issues_array_html .= 'additional="'.$additionalFieldValue.'" ';
+      }
       $issues_array_html .= '></p>';
 
       $t_row_statuses = get_status_option_list(access_get_project_level( $t_row->project_id ), $t_row->status, true, false, $t_row->project_id);
