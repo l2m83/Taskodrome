@@ -275,7 +275,7 @@
       # Get list of users having access level for all accessible projects
       $t_users = array();
       foreach( $t_projects as $t_project_id ) {
-        $t_project_users_list = project_get_all_user_rows( $t_project_id, DEVELOPER, false );
+        $t_project_users_list = project_get_all_user_rows( $t_project_id, DEVELOPER, true );
         # Do a 'smart' merge of the project's user list, into an
         # associative array (to remove duplicates)
         # Use a foreach loop for correctness
@@ -286,7 +286,7 @@
       }
       unset( $t_projects );
     } else {
-      $t_users = project_get_all_user_rows( $p_project_id, DEVELOPER, false );
+      $t_users = project_get_all_user_rows( $p_project_id, DEVELOPER, true );
     }
 
     $t_show_realname = ( ON == config_get( 'show_realname' ) );
