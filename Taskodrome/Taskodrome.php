@@ -11,14 +11,14 @@ class TaskodromePlugin extends MantisPlugin
     $this->description = plugin_lang_get("description");
     $this->page = 'config_page';
 
-    $this->version = "2.1.5";
+    $this->version = "2.1.5-A64-1";
     $this->requires = array(
       "MantisCore" => "2.0.0",
     );
 
-    $this->author = "Maxim Kuzmin";
+    $this->author = "Maxim Kuzmin, patched by l2m83";
     $this->contact = "maxriderg@gmail.com";
-    $this->url = "https://github.com/mantisbt-plugins/Taskodrome";
+    $this->url = "https://github.com/l2m83/Taskodrome";
   }
 
   public function hooks()
